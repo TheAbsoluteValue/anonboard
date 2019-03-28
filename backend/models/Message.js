@@ -11,6 +11,10 @@ let messageSchema = mongoose.Schema({
         required: true
     },
     
+    id: {
+        type: String,
+        required: true
+    },
 });
 
-let Message = module.exports = mongoose.model('Message', messageSchema)
+export default mongoose.model('Message', messageSchema)
