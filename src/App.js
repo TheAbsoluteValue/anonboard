@@ -1,28 +1,29 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Message from './Message'
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+export default function App() {
+	const [msg, setMsg] = useState(null);
+	const [messages, setMessages] = useState([]);
 
-export default App;
+	function addMessage() {
+		if (msg) {
+			setMessages([<div id="msg" key={messages.length}><Message message={msg} date={String(new Date())}></Message><br></br></div>, ...messages]);
+		}
+	}
+
+
+
+	return (
+		<div>
+			<h1>Anon board project</h1>
+			<textarea rows="4" cols="50" onChange={(e)=>setMsg(e.target.value)}></textarea>
+			<button onClick={addMessage}>Submit</button>
+			<br></br>
+			<div id="msg">
+				{messages}
+			</div>
+			<br></br>
+		</div>
+	);
+}
