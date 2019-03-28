@@ -13,7 +13,7 @@ const router = express.Router();
 
 mongoose.connect(`mongodb://${username}:${password}@ds117866.mlab.com:17866/aboard`,{ useNewUrlParser: true });
 
-let db = mongoose.connection;
+const db = mongoose.connection;
 
 db.once("open", () => console.log("Connected"));
 
