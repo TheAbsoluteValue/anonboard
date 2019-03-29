@@ -17,4 +17,4 @@ let messageSchema = mongoose.Schema({
     },
 });
 
-export default mongoose.model('Message', messageSchema)
+module.exports = mongoose.model('Message', messageSchema)

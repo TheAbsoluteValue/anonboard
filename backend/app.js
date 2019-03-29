@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import { username, password}  from './config';
-import Message from './models/Message';
-import hat from 'hat';
+const mongoose = require('mongoose');
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const hat = require('hat');
 
+const Message = require('./models/Message');
+const { username, password } = require('./config.json');
 const PORT = 3001;
 const app = express();
 app.use(cors());
@@ -21,6 +21,10 @@ db.on("error", console.error.bind(console, "Failed to connect"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+router.get("/test", (req, res) => {
+	return res.send("Works!");
+});
 
 router.get("/getMessages", (req, res) => {
 	Message.find((err, messages) => {
@@ -51,6 +55,7 @@ router.post("/sendMessage", (req, res) => {
 	message.message = content;
 	message.date = String(new Date());
 	message.id = hat();
+	console.log(`id = ${message.id}`);
 	message.save(err => {
 		if (err) return res.json({ success: false, error: err });
 		return res.json({ success: true });
