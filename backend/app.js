@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const hat = require('hat');
 
 const Message = require('./models/Message');
 const { username, password } = require('./config.json');
@@ -33,11 +32,15 @@ router.get("/getMessages", (req, res) => {
 	});
 });
 
-router.delete("/deleteMessage", (req, res) => {
+router.post("/deleteMessage", (req, res) => {
 	const { id } = req.body;
-	Message.findOneAndDelete(id, err => {
-		if (err) return res.send(err);
-		return res.send({ success: true });
+	console.log(req.body);
+	Message.deleteOne({ _id: id }, (err) => {
+		if (err) {
+			console.error(err);
+			return res.send({success: false, err});
+		}
+		res.send({success: true});
 	});
 });
 
@@ -50,11 +53,9 @@ router.post("/sendMessage", (req, res) => {
 
 	message.message = content;
 	message.date = String(new Date());
-	message.id = hat();
-	console.log(`id = ${message.id}`);
 	message.save(err => {
 		if (err) return res.send({ success: false, error: err });
-		return res.send({ success: true });
+		return res.send({ success: true, message });
 	});
 });
 

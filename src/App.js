@@ -1,28 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import Message from './Message'
 import axios from 'axios';
 import './App.css';
 
-export default function App() {
-	const [iMsg, setiMsg] = useState(null);
-	const [messages, setMessages] = useState([]);
 
-	function addMessage() {
-		if (iMsg) {
-			setMessages([<div id="iMsg" key={messages.length}><Message message={iMsg} date={String(new Date())}></Message><br></br></div>, ...messages]);
+export default function App() {
+
+	const [msgs, dispatch] = useReducer((state, action) => {
+		switch (action.type) {
+			case 'add':
+				return [action.jsx, ...state];
+			case 'delete':
+				return state.filter((msg) => msg.key !== action.id);
+			default:
+				return state;
 		}
-	}
+	}, []);
+	const [iMsg, setiMsg] = useState(null);
 
 	function getMessages() {
 		axios.get("http://localhost:3001/api/getMessages")
-			.then(res => console.log('Response', res));
-			// .then(res => setMessages(res.messages));
+			.then(res => {
+				res.data.messages.forEach(msg => {
+					dispatch({
+						type: 'add',
+						jsx: (
+							<div id="msg" key={msg._id}>
+								<Message delete={deleteMessage} message={msg.message} date={msg.date} id={msg._id}/><br/>
+							</div>
+						)
+					})
+				});
+			})
+			.catch(err => console.error(err));
 	};
 
+	function deleteMessage(id) {
+        axios.post('http://localhost:3001/api/deleteMessage', { id })
+            .then(() => {
+				console.log(msgs);
+                dispatch({
+                    type: 'delete',
+                    id
+                });
+				console.log('Message deleted');
+            })
+            .catch(err => console.error(err));
+    }
+
 	function sendMessage() {
+		if (!iMsg) return;
 		axios.post("http://localhost:3001/api/sendMessage", { content: iMsg })
 			.then(res => {
-				console.log(`Message added: ${iMsg}`);
+				console.log(res);
+				dispatch({
+					type: 'add',
+					jsx: (
+					<div id="msg" key={res.data.message._id}>
+						<Message delete={deleteMessage} message={res.data.message.message} date={res.data.message.date} id={res.data.message._id} visible={1}/><br/>
+					</div>
+					)
+				});
 			})
 			.catch(err => {
 				console.error(err);
@@ -31,6 +69,7 @@ export default function App() {
 
 	useEffect(() => {
 		getMessages();
+		return () => console.log('Done')
 	}, []);
 
 	return (
@@ -40,7 +79,7 @@ export default function App() {
 			<button onClick={sendMessage}>Submit</button>
 			<br></br>
 			<div id="msg">
-				{messages}
+				{msgs}
 			</div>
 			<br></br>
 		</div>
