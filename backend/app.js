@@ -28,8 +28,8 @@ router.get("/test", (req, res) => {
 
 router.get("/getMessages", (req, res) => {
 	Message.find((err, messages) => {
-		if (err) return res.json({ success: false, err });
-		return res.json({ success: true, messages });
+		if (err) return res.send({ success: false, err });
+		return res.send({ success: true, messages });
 	});
 });
 
@@ -37,7 +37,7 @@ router.delete("/deleteMessage", (req, res) => {
 	const { id } = req.body;
 	Message.findOneAndDelete(id, err => {
 		if (err) return res.send(err);
-		return res.json({ success: true });
+		return res.send({ success: true });
 	});
 });
 
@@ -45,20 +45,16 @@ router.post("/sendMessage", (req, res) => {
 	const message = new Message();
 	const { content } = req.body;
 
-	if (!message) {
-		return res.json({
-			success: false,
-			error: "No message"
-		});
-	}
+	if (!message)
+		return res.send({success: false, error: "No message"});
 
 	message.message = content;
 	message.date = String(new Date());
 	message.id = hat();
 	console.log(`id = ${message.id}`);
 	message.save(err => {
-		if (err) return res.json({ success: false, error: err });
-		return res.json({ success: true });
+		if (err) return res.send({ success: false, error: err });
+		return res.send({ success: true });
 	});
 });
 

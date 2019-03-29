@@ -10,11 +10,6 @@ let messageSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    
-    id: {
-        type: String,
-        required: true
-    },
 });
 
 module.exports = mongoose.model('Message', messageSchema)

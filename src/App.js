@@ -15,13 +15,12 @@ export default function App() {
 
 	function getMessages() {
 		axios.get("http://localhost:3001/api/getMessages")
-			.then(messages => messages.json())
-			.then(res => console.log(res));
+			.then(res => console.log('Response', res));
 			// .then(res => setMessages(res.messages));
 	};
 
 	function sendMessage() {
-		axios.post("http://localhost:3001/api/sendMessage", { message: iMsg })
+		axios.post("http://localhost:3001/api/sendMessage", { content: iMsg })
 			.then(res => {
 				console.log(`Message added: ${iMsg}`);
 			})
