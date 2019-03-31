@@ -21,11 +21,7 @@ db.on("error", console.error.bind(console, "Failed to connect"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-router.get("/test", (req, res) => {
-	return res.send("Works!");
-});
-
-router.get("/getMessages", (req, res) => {
+router.get("/getMessages", (_, res) => {
 	Message.find((err, messages) => {
 		if (err) return res.send({ success: false, err });
 		return res.send({ success: true, messages });

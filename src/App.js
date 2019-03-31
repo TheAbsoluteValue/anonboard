@@ -16,6 +16,7 @@ export default function App() {
 				return state;
 		}
 	}, []);
+
 	const [iMsg, setiMsg] = useState(null);
 
 	function getMessages() {
@@ -38,7 +39,6 @@ export default function App() {
 	function deleteMessage(id) {
         axios.post('http://localhost:3001/api/deleteMessage', { id })
             .then(() => {
-				console.log(msgs);
                 dispatch({
                     type: 'delete',
                     id
