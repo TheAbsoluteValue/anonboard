@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 
 router.get("/getMessages", (_, res) => {
 	Message.find((err, messages) => {
-		if (err) return res.send({ success: false, err });
+		if (err) return res.status(500)({ err });
 		return res.send({ success: true, messages });
 	});
 });
@@ -34,7 +34,7 @@ router.post("/deleteMessage", (req, res) => {
 	Message.deleteOne({ _id: id }, (err) => {
 		if (err) {
 			console.error(err);
-			return res.send({success: false, err});
+			return res.status(500)({ err });
 		}
 		res.send({success: true});
 	});
@@ -42,15 +42,16 @@ router.post("/deleteMessage", (req, res) => {
 
 router.post("/sendMessage", (req, res) => {
 	const message = new Message();
-	const { content } = req.body;
+	const { content, image } = req.body;
 
-	if (!message)
-		return res.send({success: false, error: "No message"});
+	if (!content && !image)
+		return res.status(400).send({ error: "No message"});
 
 	message.message = content;
-	message.date = String(new Date());
+	message.img = image;
+	message.date = String(new Date().toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }));
 	message.save(err => {
-		if (err) return res.send({ success: false, error: err });
+		if (err) return res.status(500)({ err });
 		return res.send({ success: true, message });
 	});
 });

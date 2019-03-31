@@ -1,0 +1,21 @@
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 8px;
+    width: 75%;
+}
+
+#board {
+    margin-bottom: 10px;
+    border: solid black 1px;
+    padding: 5px;
+}
+
+.delete {
+    display: flex;
+    width: 50px;
+    align-self: right;
+    margin-left: auto;
+    text-align: center;
+}

@@ -4,6 +4,12 @@ div {
     flex-direction: column
 }
 
-#msg {
-    border: solid black 1px
+h1 {
+    align-self: center;
+}
+
+.inputs {
+    align-self: center;
+    margin-bottom: 10px;
+    width: 500px;
 }
