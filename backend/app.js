@@ -16,25 +16,24 @@ const db = mongoose.connection;
 
 db.once("open", () => console.log("Connected"));
 
-db.on("error", console.error.bind(console, "Failed to connect"));
+db.on("error", () => console.error("Failed to connect"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 router.get("/getMessages", (_, res) => {
 	Message.find((err, messages) => {
-		if (err) return res.status(500)({ err });
+		if (err) return res.status(500).send({ err });
 		return res.send({ success: true, messages });
 	});
 });
 
 router.post("/deleteMessage", (req, res) => {
 	const { id } = req.body;
-	console.log(req.body);
 	Message.deleteOne({ _id: id }, (err) => {
 		if (err) {
 			console.error(err);
-			return res.status(500)({ err });
+			return res.status(500).send({ err });
 		}
 		res.send({success: true});
 	});
@@ -51,7 +50,7 @@ router.post("/sendMessage", (req, res) => {
 	message.img = image;
 	message.date = String(new Date().toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }));
 	message.save(err => {
-		if (err) return res.status(500)({ err });
+		if (err) return res.status(500).send({ err });
 		return res.send({ success: true, message });
 	});
 });

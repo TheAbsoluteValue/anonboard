@@ -43,7 +43,6 @@ export default function App() {
                     type: 'delete',
                     id
                 });
-				console.log('Message deleted');
             })
             .catch(err => console.error(err));
     }
@@ -52,7 +51,6 @@ export default function App() {
 		if (!iMsg && !image) return;
 		axios.post("http://localhost:3001/api/sendMessage", { content: iMsg, image })
 			.then(res => {
-				console.log(res);
 				dispatch({
 					type: 'add',
 					jsx: (
@@ -73,7 +71,6 @@ export default function App() {
 
 	useEffect(() => {
 		getMessages();
-		return () => console.log('Done')
 	}, []);
 
 	function convertImageToBase64(img) {
