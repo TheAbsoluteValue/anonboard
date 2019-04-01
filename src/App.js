@@ -18,6 +18,7 @@ export default function App() {
 
 	const [iMsg, setiMsg] = useState(null);
 	const [image, setImage] = useState(null);
+	const [charCount, setcharCount] = useState(0);
 
 	function getMessages() {
 		axios.get("http://localhost:3001/api/getMessages")
@@ -84,10 +85,16 @@ export default function App() {
 		}
 	}
 
+	function handleTextChange(e) {
+		setiMsg(e.target.value);
+		setcharCount(iMsg.length);
+	}
+
 	return (
 		<div>
 			<h1>Anon board project</h1>
-			<textarea className="inputs" rows="4" cols="25" onChange={(e)=>setiMsg(e.target.value)}></textarea>
+			<textarea className="inputs" rows="4" cols="25" onChange={(e)=>handleTextChange(e)} maxlength="50"></textarea>
+			<p id="charCount">{charCount} / 50</p>
 			<input className="inputs" type="file" accept="image/*" onChange={(e)=>setImage(convertImageToBase64(e.target.files[0]))}/>
 			<button className="inputs" onClick={sendMessage}>Submit</button>
 			<br></br>
