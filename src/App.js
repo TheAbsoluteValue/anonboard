@@ -74,6 +74,7 @@ export default function App() {
 	}, []);
 
 	function convertImageToBase64(img) {
+		if (!img) return;
 		const fr = new FileReader();
 		fr.readAsDataURL(img);
 		fr.onload = () => {
@@ -88,7 +89,7 @@ export default function App() {
 	return (
 		<div>
 			<h1>Anon board project</h1>
-			<textarea className="inputs" rows="4" cols="25" onChange={(e)=>handleTextChange(e)} maxlength="50"></textarea>
+			<textarea className="inputs" rows="4" cols="25" onChange={(e)=>handleTextChange(e)} maxLength="50"></textarea>
 			<input className="inputs" type="file" accept="image/*" onChange={(e)=>setImage(convertImageToBase64(e.target.files[0]))}/>
 			<button className="inputs" onClick={sendMessage}>Submit</button>
 			<br></br>
